@@ -1,8 +1,14 @@
 import categoryModel from "../../DB/Models/categoryModel.js";
 import slugify from "slugify";
 import cloudinary from "../Services/cloudinary.js";
-export const getCategories = (req, res) => {
-  return res.json({ message: "Categories" });
+
+export const getCategories = async(req, res) => {
+  const categories = await categoryModel.find();
+  return res.status(200).json({ message: "success", categories });
+};
+export const getActiveCategory = async(req, res) => {
+  const categories = await categoryModel.find({status: "Active"}).select('name image');
+  return res.status(200).json({ message: "success", categories });
 };
 export const createCategory = async(req, res) => {
   const name = req.body.name.toLowerCase();
@@ -12,7 +18,39 @@ export const createCategory = async(req, res) => {
   const { secure_url, public_id } = await cloudinary.uploader.upload(
     req.file.path,
     { folder: `${process.env.APP_NAME}/categories` }
-  );
-  const category = await categoryModel.create({ name, slug: slugify(name), image: {secure_url, public_id} });
-  return res.status(200).json({message: "sucess", category})
-};
+    );
+    const category = await categoryModel.create({ name, slug: slugify(name), image: {secure_url, public_id} });
+    return res.status(200).json({message: "sucess", category})
+  };
+export const getCategoryById = async (req, res) => {
+    const { id } = req.params;
+    const category = await categoryModel.findById(id)
+    return res.status(200).json({ message: "success", category });
+}
+export const updateCategory = async (req, res) => {
+  const category = await categoryModel.findById(req.params.id);
+  if (!category) {
+    return res.status(404).json({ message: "invalid category id !" });
+  }
+  if (req.body.name) {
+    if (await categoryModel.findOne({ name: req.body.name})) {
+      return res.status(409).json({ message: `Category name exist :: ${req.body.name}` });
+    }
+    category.name = req.body.name;
+    category.slug = slugify(req.body.name);
+  }
+  if (req.status) {
+    category.status = req.body.status;
+  }
+  if (req.file) {
+    const { secure_url, public_id } = await cloudinary.uploader.upload(
+      req.file.path,
+      { folder: `${process.env.APP_NAME}/categories` }
+    );
+    await cloudinary.uploader.upload.destroy(category.image.public_id);
+    category.image = { secure_url, public_id };
+  }
+  await category.save();
+  return res.status(200).json({message: "success", category})
+  }
+  
