@@ -17,6 +17,7 @@ const userSchema = new Schema({
     },
     image: {
         type: Object,
+        required: true
     },
     phone: {
         type: String,
@@ -25,7 +26,7 @@ const userSchema = new Schema({
         type: String,
     },
     confirmEmail: {
-        type: Bollean,
+        type: Boolean,
         default: false,
     },
     gender: {
