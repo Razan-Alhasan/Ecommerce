@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import userModel from "../../DB/Models/userModel.js";
 import cloudinary from "../Services/cloudinary.js";
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";;
 export const signUp = async (req, res) => {
     const { userName, email, password } = req.body;
     const user = await userModel.findOne({ email });

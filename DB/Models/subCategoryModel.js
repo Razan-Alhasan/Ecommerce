@@ -1,5 +1,5 @@
 import mongoose, { Schema, model, Types } from "mongoose";
-const categorySchema = new Schema({
+const subCategorySchema = new Schema({
         name: {
             type: String,
             required: true,
@@ -24,18 +24,17 @@ const categorySchema = new Schema({
     updatedBy: {
         type: Types.ObjectId,
         ref: "User"
+    },
+    categoryId: {
+        type: Types.ObjectId,
+        ref: "Category",
+        required: true
     }
     },
     {
         timestamps: true,
-        toJSON: {virtuals: true},
-        toObject: {virtuals: true}
     }
 );
-categorySchema.virtual('SubCategory', {
-    localField:'_id',
-    foreignField: 'categoryId',
-    ref: 'SubCategory'
-})
-const categoryModel = mongoose.models.Category || model("Category", categorySchema);
-export default categoryModel;
+const subCategoryModel =
+  mongoose.models.SubCategory || model("SubCategory", subCategorySchema);
+export default subCategoryModel;
