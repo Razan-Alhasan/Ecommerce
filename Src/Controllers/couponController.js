@@ -9,7 +9,7 @@ export const createCoupon = async (req, res) => {
     return res.status(201).json({ message:"success", coupon})
 };
 export const getCoupons = async (req, res) => {
-    const coupons = await couponModel.find();
+    const coupons = await couponModel.find({isDeleted: false});
     return res.status(200).json({ message: "success", coupons });
 };
 export const updateCoupon = async (req, res) => {
