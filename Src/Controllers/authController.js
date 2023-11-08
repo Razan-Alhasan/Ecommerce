@@ -25,8 +25,7 @@ export const signIn = async (req, res) => {
     if (!match) {
         return res.status(400).json({ message: "data invalid" });
     }
-    const token = jwt.sign(
-      { id: user._id, role: user.role, status: user.status },
+    const token = jwt.sign({ id: user._id, role: user.role, status: user.status },
       process.env.LOGIN_SECRET, {expiresIn: "5m"}
     );
     const refreshToken = jwt.sign(
