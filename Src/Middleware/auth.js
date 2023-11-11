@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import userModel from "../../DB/Models/userModel.js";
 
-export const auth = () => {
+export const auth = (accessRoles = []) => {
     return async (req, res, next) => {
         const { authorization } = req.headers;
         if (!authorization?.startsWith(process.env.BEARERKEY)) {
@@ -16,10 +16,10 @@ export const auth = () => {
         if (!user) {
             return res.status(400).json({message:"not registred user"})
         }
-        if (user.role == "User") {
-            return res.status(400).json({message:"not auth user"})
+        if (! accessRoles.includes(user.role)) {
+            return res.status(403).json({message:"not authorization user"})
         }
-        return res.json({message: "fg", user})
+        req.user = user;
         next();
     }
 }
