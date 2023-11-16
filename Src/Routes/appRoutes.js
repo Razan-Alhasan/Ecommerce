@@ -3,6 +3,7 @@ import categoriesRoutes from "./categoriesRoutes.js";
 import productsRoutes from "./productsRoutes.js";
 import subCategoryRoutes from "./subCategoryRoutes.js";
 import authRoutes from "./authRoutes.js";
+import cartRoutes from "./cartRoutes.js";
 import couponRoutes from "./couponRoutes.js";
 
 const initApp = (app, express) => {
@@ -14,6 +15,7 @@ const initApp = (app, express) => {
     app.use("/auth", authRoutes);
     app.use("/products", productsRoutes);
     app.use("/coupon", couponRoutes);
+    app.use("/cart", cartRoutes);
     app.get("*", ((req, res) => res.json({ message: "page not found" })));
 };
 export default initApp;

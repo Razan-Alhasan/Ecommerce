@@ -50,6 +50,11 @@ const productSchema = new Schema({
         type: Boolean,
         default: false
     },
+    colors: [String],
+    sizes: [{
+        type: String,
+        enum: ['s', 'm', 'lg', 'xl']
+    }],
     categoryId: { type: Types.ObjectId, ref: "Category", required: true },
     subCategoryId: { type: Types.ObjectId, ref: "subCategory", required: true },
     createdBy: { type: Types.ObjectId, ref: "User", required: true },
