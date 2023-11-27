@@ -5,6 +5,7 @@ import subCategoryRoutes from "./subCategoryRoutes.js";
 import authRoutes from "./authRoutes.js";
 import cartRoutes from "./cartRoutes.js";
 import couponRoutes from "./couponRoutes.js";
+import { globalErrorHandling } from "../Services/errorHandling.js";
 
 const initApp = (app, express) => {
     app.use(express.json());
@@ -17,5 +18,6 @@ const initApp = (app, express) => {
     app.use("/coupon", couponRoutes);
     app.use("/cart", cartRoutes);
     app.get("*", ((req, res) => res.json({ message: "page not found" })));
+    app.use(globalErrorHandling);
 };
 export default initApp;

@@ -4,9 +4,12 @@ import * as productsController from "../Controllers/productsController.js";
 import { auth } from "../Middleware/auth.js";
 import { endPoints } from "../EndPoints/productEndPoint.js";
 import fileUpload, { fileValidation } from "../Services/multer.js";
-router.get("/", productsController.getProducts);
+import { asyncHandler } from "../Services/errorHandling.js";
+import { validation } from "../Middleware/validation.js";
+import * as validators from "../Validations/productValidation.js"
+router.get("/", asyncHandler(productsController.getProducts));
 router.post("/", auth(endPoints.create), fileUpload(fileValidation.image).fields([
     {name: "mainImage", maxCount:1},
     {name: "subImages", maxCount:4},
-]), productsController.createProduct)
+]), validation(validators.createProduct), asyncHandler(productsController.createProduct))
 export default router;

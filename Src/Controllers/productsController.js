@@ -4,18 +4,19 @@ import cloudinary from "../Services/cloudinary.js";
 import categoryModel from "../../DB/Models/categoryModel.js";
 import subCategoryModel from "../../DB/Models/subCategoryModel.js";
 
-export const getProducts = (req, res) => {
-    return res.json({message: "products"})
+export const getProducts = async(req, res, next) => {
+    const products = await productModel.find();
+    res.status(200).json({message: "success", products});
 };
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res, next) => {
     const { name, price, discount, categoryId, subCategoryId } = req.body;
     const checkCategory = await categoryModel.findById(categoryId);
     if (!checkCategory) {
-        return res.status(404).json({message:"Category not found!"})
+        return next(new Error("category not found!", { cause : 404 }));
     }
     const checkSubCategory = await subCategoryModel.findById(subCategoryId);
     if (!checkSubCategory) {
-        return res.status(404).json({message:"SubCategory not found!"})
+        return next(new Error("sub category not found!", { cause : 404 }));
     }
     req.body.slug = slugify(name);
     req.body.finalPrice = price - (price * (discount || 0) / 100);
@@ -34,9 +35,7 @@ export const createProduct = async (req, res) => {
     req.body.updatedBy = req.user._id;
     const product = await productModel.create(req.body);
     if (!product) {
-        return res.status(400).json({message: "error while creating product"})
+        return next(new Error("error while creating product", { cause : 400 }));
     }
     return res.status(201).json({message: "success", product})
-    
-
-}
+};
