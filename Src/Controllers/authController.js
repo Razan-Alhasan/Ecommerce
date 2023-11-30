@@ -100,7 +100,9 @@ export const resetPassword = async (req, res, next) => {
     return next(new Error("invalid code !", { cause : 404 }));
   }
   const pass = await bcrypt.hash(password, parseInt(process.env.SALT_ROUND));
+  user.sendCode = null;
+  user.changePasswordTime = Date.now();
   user.password = pass;
-  user.save();
+  await user.save();
   return res.status(200).json({ message: "success" });
 };

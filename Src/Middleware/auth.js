@@ -5,19 +5,22 @@ export const auth = (accessRoles = []) => {
     return async (req, res, next) => {
         const { authorization } = req.headers;
         if (!authorization?.startsWith(process.env.BEARERKEY)) {
-            return res.status(400).json({message:"invalid authorization"})
+            return next(new Error("invalid authorization", {Cause:400}))
         }
         const token = authorization.split(process.env.BEARERKEY)[1];
         const decoded = jwt.verify(token, process.env.LOGIN_SECRET);
         if (!decoded) {
-            return res.status(400).json({message:"invalid authorization"})
+            return next(new Error("invalid authorization", {Cause:400}))
         }
         const user = await userModel.findById(decoded.id);
         if (!user) {
-            return res.status(400).json({message:"not registred user"})
+            return next(new Error("not registred user", {Cause:400}))
         }
         if (! accessRoles.includes(user.role)) {
-            return res.status(403).json({message:"not authorization user"})
+            return next(new Error("not authorization user", {Cause:403}))
+        }
+        if (parseInt(user.chanePasswordTime?.getTime() / 1000) > decoded.iat) {
+            return next(new Error("expired token , plz login again", {Cause:400}))
         }
         req.user = user;
         next();

@@ -8,8 +8,9 @@ import { endPoints } from "../EndPoints/categoryEndPoint.js";
 import { asyncHandler } from "../Services/errorHandling.js";
 import { validation } from "../Middleware/validation.js";
 import * as validators from "../Validations/categoriesValidation.js"
+import roles from "../Middleware/roles.js";
 router.use("/:id/subcategory", subCategoryRoutes);
-router.get("/", auth(endPoints.getAll), asyncHandler(categoriesController.getCategories));
+router.get("/", auth(Object.values(roles)), asyncHandler(categoriesController.getCategories));
 router.get("/active", auth(endPoints.getActive), asyncHandler(categoriesController.getActiveCategory));
 router.get("/:id", auth(endPoints.getById), validation(validators.getCategoryById) ,asyncHandler(categoriesController.getCategoryById));
 router.patch("/:id", auth(endPoints.update), fileUpload(fileValidation.image).single("image"), validation(validators.updateCategory), asyncHandler(categoriesController.updateCategory));
