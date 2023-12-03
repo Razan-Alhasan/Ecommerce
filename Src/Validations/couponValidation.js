@@ -1,7 +1,8 @@
 import joi from "joi";
 export const createCoupon = joi.object({
     name: joi.string().required(),
-    amount: joi.number().required()
+    amount: joi.number().required(),
+    expireDate: joi.date().greater('now').required()
 });
 export const updateCoupon = joi.object({
     name: joi.string(),

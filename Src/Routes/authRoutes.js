@@ -11,4 +11,5 @@ router.post("/signIn", validation(validators.signIn), asyncHandler(authControlle
 router.get("/confirmEmail/:token", asyncHandler(authController.confirmEmail));
 router.patch("/sendCode", validation(validators.sendCode), asyncHandler(authController.sendCode));
 router.patch("/resetPass", validation(validators.resetPass), asyncHandler(authController.resetPassword));
+router.delete("/deleteUnconfirmed", asyncHandler(authController.deleteUnConfirmedUsers));
 export default router;

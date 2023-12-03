@@ -64,7 +64,7 @@ export const signIn = async (req, res, next) => {
   const token = jwt.sign(
     { id: user._id, role: user.role, status: user.status },
     process.env.LOGIN_SECRET,
-    { expiresIn: "5m" }
+    { expiresIn: "1h" }
   );
   const refreshToken = jwt.sign(
     { id: user._id, role: user.role, status: user.status },
@@ -106,3 +106,10 @@ export const resetPassword = async (req, res, next) => {
   await user.save();
   return res.status(200).json({ message: "success" });
 };
+export const deleteUnConfirmedUsers = async (req, res, next) => {
+  const users = await userModel.deleteMany({ confirmEmail: false });
+  if (!users) {
+    return next (new Error(" All users are confirmed", {cause:400}))
+  }
+  return res.status(200).json({ message: success });
+}

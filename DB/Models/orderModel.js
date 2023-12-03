@@ -9,7 +9,7 @@ const orderSchema = new Schema({
         productId: { type: Types.ObjectId, ref: "Product", required: true },
         quantity: { type: Number, default: 1, required: true },
         unitPrice: { type: Number, required: true },
-        finalPrice: {}
+        finalPrice: { type: Number, required: true }
     }],
     finalPrice: {
         type: Number,
@@ -17,7 +17,9 @@ const orderSchema = new Schema({
     },
     address: { type: String, required: true },
     phoneNumber: { type: String, required: true },
-    couponId: { type: Types.ObjectId, ref: "Coupon", required: true },
+    couponName: {
+        type: String
+    },
     paymentType: {
         type: String,
         default: "Cash",
@@ -33,7 +35,6 @@ const orderSchema = new Schema({
     updatedBy: {
         type: Types.ObjectId,
         ref: "User",
-        required: true
     }
 },{
         timestamps: true,

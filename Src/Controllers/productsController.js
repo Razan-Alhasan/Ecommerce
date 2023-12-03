@@ -39,3 +39,19 @@ export const createProduct = async (req, res, next) => {
     }
     return res.status(201).json({message: "success", product})
 };
+export const getProductById = async (req, res, next) => {
+    const { id } = req.params;
+    const product = await productModel.findById(id);
+    if (!product) {
+        return next (new Error('product not found'), {cause: 404});
+    }
+    return res.status(200).json({message: "success", product})
+}
+export const getProductsByCategory = async (req, res, next) => {
+    const { catId } = req.params;
+    const products = await productModel.find({ categoryId: catId });;
+    if (!products) {
+        return next (new Error('products not found'), {cause: 404});
+    }
+    return res.status(200).json({message: "success", products})
+}

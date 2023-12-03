@@ -8,6 +8,8 @@ import { asyncHandler } from "../Services/errorHandling.js";
 import { validation } from "../Middleware/validation.js";
 import * as validators from "../Validations/productValidation.js"
 router.get("/", asyncHandler(productsController.getProducts));
+router.get("/:id", asyncHandler(productsController.getProductById));
+router.get("/:catId", asyncHandler(productsController.getProductsByCategory));
 router.post("/", auth(endPoints.create), fileUpload(fileValidation.image).fields([
     {name: "mainImage", maxCount:1},
     {name: "subImages", maxCount:4},
