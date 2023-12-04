@@ -53,7 +53,6 @@ export const createOrder = async (req, res, next) => {
     for (const product of finalProductList) {
         await productModel.findByIdAndUpdate({ _id: product.productId }, { $inc: { stock: -product.quantity }})
     }
-    // return res.json(req.body.coupon)
     if (req.body.coupon) {
         await couponModel.findByIdAndUpdate({_id: req.body.coupon._id},{$addToSet:{usedBy:req.user._id }})
     }

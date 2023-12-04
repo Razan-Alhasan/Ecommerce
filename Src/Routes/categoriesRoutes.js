@@ -10,9 +10,9 @@ import { validation } from "../Middleware/validation.js";
 import * as validators from "../Validations/categoriesValidation.js"
 import roles from "../Middleware/roles.js";
 router.use("/:id/subcategory", subCategoryRoutes);
-router.get("/", auth(Object.values(roles)), asyncHandler(categoriesController.getCategories));
-router.get("/active", auth(endPoints.getActive), asyncHandler(categoriesController.getActiveCategory));
-router.get("/:id", auth(endPoints.getById), validation(validators.getCategoryById) ,asyncHandler(categoriesController.getCategoryById));
+router.get("/", auth(endPoints.getAll), asyncHandler(categoriesController.getCategories));
+router.get("/active", asyncHandler(categoriesController.getActiveCategory));
+router.get("/:id", validation(validators.getCategoryById) ,asyncHandler(categoriesController.getCategoryById));
 router.patch("/:id", auth(endPoints.update), fileUpload(fileValidation.image).single("image"), validation(validators.updateCategory), asyncHandler(categoriesController.updateCategory));
 router.post("/", auth(endPoints.create), fileUpload(fileValidation.image).single("image"), validation(validators.createCategory), asyncHandler(categoriesController.createCategory));
 export default router;
