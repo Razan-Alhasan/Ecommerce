@@ -13,5 +13,7 @@ router.get("/:catId", asyncHandler(productsController.getProductsByCategory));
 router.post("/", auth(endPoints.create), fileUpload(fileValidation.image).fields([
     {name: "mainImage", maxCount:1},
     {name: "subImages", maxCount:4},
-]), validation(validators.createProduct), asyncHandler(productsController.createProduct))
+])
+    // , validation(validators.createProduct)
+    , asyncHandler(productsController.createProduct));
 export default router;
