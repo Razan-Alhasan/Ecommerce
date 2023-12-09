@@ -30,7 +30,6 @@ const orderSchema = new Schema({
         default: "pending",
         enum: ["pending", "cancelled", 'confirmed', 'onWay', "arrived"],
     },
-    reasonRejected: String,
     note: String,
     updatedBy: {
         type: Types.ObjectId,

@@ -16,15 +16,18 @@ export const getProducts = async (req, res, next) => {
     queryObject = queryObject.replace(/\b(lt|lte|gt|gte|in|nin|neq|eq)\b/g, match=>`$${match}`);
     queryObject = JSON.parse(queryObject);
     const mongooseQuery = productModel.find(queryObject).limit(limit).skip(skip)
-    mongooseQuery.find({
-        $or :[
-            { name:{$regex: new RegExp(req.query.search), $options: 'i' } },
-            { description:{$regex: new RegExp(req.query.search), $options: 'i' } }
-        ]
-    })
+    if(req.query.search){
+        mongooseQuery.find({
+            $or :[
+                { name:{$regex:(req.query.search), $options: 'i' } },
+                { description:{$regex:(req.query.search), $options: 'i' } }
+            ]
+        })
+    }
     mongooseQuery.select('name mainImage')
+    const total = await productModel.estimatedDocumentCount();
     const products = await mongooseQuery.sort(req.query.sort?.replaceAll(',', ' '));
-    return res.json({message:"success",products});
+    return res.json({message:"success", count:products.length, total, products});
 };
 export const createProduct = async (req, res, next) => {
         const { name, price, discount, categoryId, subCategoryId } = req.body;

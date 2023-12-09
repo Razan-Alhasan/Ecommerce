@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import userModel from "../../DB/Models/userModel.js";
-import { response } from "express";
 
 export const auth = (accessRoles = []) => {
     return async (req, res, next) => {
@@ -23,7 +22,7 @@ export const auth = (accessRoles = []) => {
         if (! accessRoles.includes(user.role)) {
             return next(new Error("not authorization user", {Cause:403}))
         }
-        if (parseInt(user.chanePasswordTime?.getTime() / 1000) > decoded.iat) {
+        if (parseInt(user.changePasswordTime?.getTime() / 1000) > decoded.iat) {
             return next(new Error("expired token , plz login again", {Cause:400}))
         }
         req.user = user;
