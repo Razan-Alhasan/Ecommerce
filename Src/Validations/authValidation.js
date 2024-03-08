@@ -4,7 +4,7 @@ export const signUp = joi.object({
     userName: joi.string().min(3).required(),
     email: generalFields.email,
     password: generalFields.password,
-    file: generalFields.file.required()
+    file: generalFields.file
 })
 export const signIn = joi.object({
     email: generalFields.email,
