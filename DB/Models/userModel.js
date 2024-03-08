@@ -17,7 +17,6 @@ const userSchema = new Schema({
     },
     image: {
         type: Object,
-        required: true
     },
     phone: {
         type: String,

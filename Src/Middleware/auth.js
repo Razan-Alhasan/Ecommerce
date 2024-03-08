@@ -12,7 +12,7 @@ export const auth = (accessRoles = []) => {
         if (!decoded) {
             return next(new Error("invalid authorization"), { cause: 400 });
         }
-        if (decoded.exp < new Date().getTime()/1000) {
+        if (decoded.exp < (new Date().getTime()/1000)) {
             return next(new Error("token has been expired"), { cause: 400 })
         }
         const user = await userModel.findById(decoded.id);
