@@ -7,11 +7,13 @@ import cartRoutes from "./cartRoutes.js";
 import couponRoutes from "./couponRoutes.js";
 import orderRoutes from "./orderRoutes.js";
 import userRoutes from "./userRoutes.js";
+import cors from "cors"
 import { globalErrorHandling } from "../Services/errorHandling.js";
 
 const initApp = (app, express) => {
     app.use(express.json());
     connectDB();
+    app.use(cors())
     app.get("/", ((req, res) => res.json({ message: "welcome" })));
     app.use("/categories", categoriesRoutes);
     app.use("/subCategory", subCategoryRoutes);
