@@ -11,7 +11,7 @@ export const getCategories = async(req, res) => {
 };
 export const getActiveCategory = async (req, res) => {
   const { skip, limit } = pagination(req.query.page, req.query.limit);
-  const categories = await categoryModel.find({status: "Active"}).skip(skip).limit(limit).select('name image');
+  const categories = await categoryModel.find({status: "Active"}).skip(skip).limit(limit);
   return res.status(200).json({ message: "success", categories });
 };
 export const createCategory = async(req, res, next) => {
@@ -28,7 +28,7 @@ export const createCategory = async(req, res, next) => {
 };
 export const getCategoryById = async (req, res) => {
     const { id } = req.params;
-    const category = await categoryModel.findById(id)
+  const category = await categoryModel.findById(id).populate('SubCategory')
     return res.status(200).json({ message: "success", category });
 }
 export const updateCategory = async (req, res, next) => {
