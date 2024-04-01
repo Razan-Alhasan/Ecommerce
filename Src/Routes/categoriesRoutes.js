@@ -12,7 +12,8 @@ import roles from "../Middleware/roles.js";
 router.use("/:id/subcategory", subCategoryRoutes);
 router.get("/", auth(endPoints.getAll), asyncHandler(categoriesController.getCategories));
 router.get("/active", asyncHandler(categoriesController.getActiveCategory));
-router.get("/:id", validation(validators.getCategoryById) ,asyncHandler(categoriesController.getCategoryById));
+router.get("/:id", asyncHandler(categoriesController.getCategoryById));
 router.patch("/:id", auth(endPoints.update), fileUpload(fileValidation.image).single("image"), validation(validators.updateCategory), asyncHandler(categoriesController.updateCategory));
-router.post("/", auth(endPoints.create), fileUpload(fileValidation.image).single("image"), validation(validators.createCategory), asyncHandler(categoriesController.createCategory));
+router.post("/", auth(endPoints.create), fileUpload(fileValidation.image).single("image"),
+    asyncHandler(categoriesController.createCategory));
 export default router;
