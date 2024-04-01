@@ -11,7 +11,7 @@ export const getCategories = async(req, res) => {
 };
 export const getActiveCategory = async (req, res) => {
   const { skip, limit } = pagination(req.query.page, req.query.limit);
-  const categories = await categoryModel.find({status: "Active"}).skip(skip).limit(limit);
+  const categories = await categoryModel.find({status: "Active"}).skip(skip).limit(limit).populate('SubCategory');
   return res.status(200).json({ message: "success", categories });
 };
 export const createCategory = async(req, res, next) => {
